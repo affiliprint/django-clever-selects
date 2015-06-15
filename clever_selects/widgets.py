@@ -35,6 +35,7 @@ class ChainedSelect(Select):
         js = """
         <script type="text/javascript">
         //<![CDATA[
+        (function($) {
             $(document).ready(function(){
                 var parent_field = $("#%(parentfield_id)s");
                 parent_field.addClass('chained-parent-field');
@@ -43,7 +44,11 @@ class ChainedSelect(Select):
                     parent_field.attr('chained_ids', "%(chained_id)s");
                 else
                     parent_field.attr('chained_ids', chained_ids + ",%(chained_id)s");
+                parent_field.change(function() {
+                    $(this).loadAllChainedChoices();
+                });
             });
+        })($ || django.jQuery || grp.jQuery);
         //]]>
         </script>
 
